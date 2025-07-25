@@ -15,7 +15,7 @@ export default function PaymentPage() {
   useEffect(() => {
     const fetchBooking = async () => {
       try {
-        const res = await axios.get(`/api/bookings/${bookingId}`, {
+        const res = await axios.get(`https://hotelroombooking-jmh1.onrender.com/api/bookings/${bookingId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
