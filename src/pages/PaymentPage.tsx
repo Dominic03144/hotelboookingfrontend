@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
 import { loadStripe } from "@stripe/stripe-js";
+import api from "../lib/axios"; // ✅ Use your custom Axios instance!
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY!);
 
@@ -15,7 +15,7 @@ export default function PaymentPage() {
   useEffect(() => {
     const fetchBooking = async () => {
       try {
-        const res = await axios.get(`/api/bookings/${bookingId}`, {
+        const res = await api.get(`/bookings/${bookingId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -41,8 +41,8 @@ export default function PaymentPage() {
     }
 
     try {
-      const res = await axios.post(
-        "/api/payments/create-checkout-session",
+      const res = await api.post(
+        "/payments/create-checkout-session",
         {
           bookingId: bookingId,
           amount: booking.totalAmount * 100,
