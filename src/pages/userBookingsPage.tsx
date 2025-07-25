@@ -42,7 +42,7 @@ export default function UserBookingsPage() {
       }
 
       const res = await axios.get(
-        "http://localhost:8080/api/bookings/my-bookings",
+        "https://hotelroombooking-jmh1.onrender.com/api/bookings/my-bookings",
         {
           headers: {
             Authorization: `Bearer ${token}`,

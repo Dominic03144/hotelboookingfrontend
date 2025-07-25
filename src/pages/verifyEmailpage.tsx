@@ -18,7 +18,7 @@ export default function VerifyEmailPage() {
     setLoading(true);
 
     try {
-      const res = await axios.post("http://localhost:8080/api/auth/verify-email", {
+      const res = await axios.post("https://hotelroombooking-jmh1.onrender.com/api/auth/verify-email", {
         email,
         code,
       });

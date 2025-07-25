@@ -24,7 +24,7 @@ export default function HotelsPage() {
   useEffect(() => {
     const fetchHotels = async () => {
       try {
-        const res = await fetch("http://localhost:8080/api/hotels");
+        const res = await fetch("https://hotelroombooking-jmh1.onrender.com/api/hotels");
         if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
         const data: Hotel[] = await res.json();
         setHotels(data);

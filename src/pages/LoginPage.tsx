@@ -42,7 +42,7 @@ export default function LoginPage() {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/auth/login",
+        "https://hotelroombooking-jmh1.onrender.com/api/auth/login",
         form,
         {
           validateStatus: () => true,

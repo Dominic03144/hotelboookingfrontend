@@ -27,14 +27,14 @@ export default function HotelRoomsPage() {
       try {
         setLoading(true);
 
-        const hotelRes = await fetch(`http://localhost:8080/api/hotels`);
+        const hotelRes = await fetch(`https://hotelroombooking-jmh1.onrender.com/api/hotels`);
         if (!hotelRes.ok) throw new Error("Failed to fetch hotels");
         const hotelData: Hotel[] = await hotelRes.json();
         const currentHotel = hotelData.find(h => h.hotelId === Number(hotelId));
         if (!currentHotel) throw new Error("Hotel not found");
         setHotel(currentHotel);
 
-        const roomRes = await fetch(`http://localhost:8080/api/rooms`);
+        const roomRes = await fetch(`https://hotelroombooking-jmh1.onrender.com/api/rooms`);
         if (!roomRes.ok) throw new Error("Failed to fetch rooms");
         const allRooms: any[] = await roomRes.json();
 

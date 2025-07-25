@@ -55,7 +55,7 @@ export default function UserDashboardPage() {
   } = useQuery<Booking[]>({
     queryKey: ["myBookings"],
     queryFn: async () => {
-      const res = await axios.get("http://localhost:8080/api/bookings/my-bookings", {
+      const res = await axios.get("https://hotelroombooking-jmh1.onrender.com/api/bookings/my-bookings", {
         headers: { Authorization: `Bearer ${token}` },
         withCredentials: true,
       });

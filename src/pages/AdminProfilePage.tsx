@@ -34,7 +34,7 @@ export default function AdminProfilePage() {
 
     try {
       const res = await axios.put(
-        `http://localhost:8080/api/admin/profile`,
+        `https://hotelroombooking-jmh1.onrender.com/api/admin/profile`,
         {
           firstName: form.firstName.trim(),
           lastName: form.lastName.trim(),

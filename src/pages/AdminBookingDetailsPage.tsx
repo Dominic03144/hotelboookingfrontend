@@ -27,7 +27,7 @@ const AdminBookingDetailPage: React.FC = () => {
   const fetchBooking = useCallback(async () => {
     try {
       if (!id) throw new Error("Booking ID is missing");
-      const res = await fetch(`http://localhost:8080/api/bookings/${id}`);
+      const res = await fetch(`https://hotelroombooking-jmh1.onrender.comapi/bookings/${id}`);
       if (!res.ok) throw new Error(`Failed to fetch booking: ${res.statusText}`);
       const data: BookingDetail = await res.json();
       setBooking(data);

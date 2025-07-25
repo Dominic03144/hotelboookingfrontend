@@ -38,14 +38,14 @@ const HotelDetailsPage: React.FC = () => {
   useEffect(() => {
     const fetchHotelAndReviews = async () => {
       try {
-        const hotelRes = await fetch(`http://localhost:8080/api/hotels/${id}`);
+        const hotelRes = await fetch(`https://hotelroombooking-jmh1.onrender.com/api/hotels/${id}`);
         if (!hotelRes.ok)
           throw new Error(`Hotel fetch error! Status: ${hotelRes.status}`);
         const hotelData = await hotelRes.json();
         setHotel(hotelData);
 
         const reviewsRes = await fetch(
-          `http://localhost:8080/api/hotels/${id}/reviews`
+          `https://hotelroombooking-jmh1.onrender.com/api/hotels/${id}/reviews`
         );
         if (!reviewsRes.ok)
           throw new Error(`Reviews fetch error! Status: ${reviewsRes.status}`);

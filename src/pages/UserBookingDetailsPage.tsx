@@ -32,7 +32,7 @@ export default function BookingDetailsPage() {
     queryKey: ["booking", bookingId],
     queryFn: async () => {
       const res = await axios.get(
-        `http://localhost:8080/api/bookings/${bookingId}`,
+        `https://hotelroombooking-jmh1.onrender.com/api/bookings/${bookingId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
           withCredentials: true,
