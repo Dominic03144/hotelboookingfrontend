@@ -38,7 +38,7 @@ export default function PaymentSuccessPage() {
     setError(null);
 
     try {
-      const res = await fetch(`http://localhost:8080/api/payments/${sessionId}/status`, {
+      const res = await fetch(`https://hotelroombooking-jmh1.onrender.com/api/payments/${sessionId}/status`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
