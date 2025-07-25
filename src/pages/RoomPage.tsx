@@ -83,7 +83,7 @@ const BookRoomPage: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      const res = await fetch(`http://localhost:8080/api/bookings`, {
+      const res = await fetch(`https://hotelroombooking-jmh1.onrender.com/api/bookings`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
