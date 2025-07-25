@@ -1,4 +1,4 @@
-import React from "react";
+
 import { useNavigate } from "react-router-dom";
 import backgroundImage from "../assets/about-bg.jpg"; // adjust path as needed
 
