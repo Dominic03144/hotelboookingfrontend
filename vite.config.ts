@@ -9,7 +9,7 @@ export default defineConfig({
     port: 5173, // your Vite dev server port
     proxy: {
       "/api": {
-        target: "http://localhost:8080", // your Express backend port
+        target: "https://hotelroombooking-jmh1.onrender.com", // your Express backend port
         changeOrigin: true,
         secure: false,
       },
