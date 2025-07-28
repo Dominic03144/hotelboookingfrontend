@@ -29,7 +29,7 @@ export default function AdminBookingsPage() {
 
   const fetchBookings = async () => {
     try {
-      const res = await fetch("http://localhost:8080/api/bookings", {
+      const res = await fetch("https://hotelroombooking-jmh1.onrender.com/api/bookings", {
         credentials: "include",
       });
       if (!res.ok) throw new Error("Failed to fetch bookings");

@@ -32,7 +32,7 @@ export default function AdminHotelsPage() {
   useEffect(() => {
     const fetchHotels = async () => {
       try {
-        const res = await fetch("http://localhost:8080/api/hotels");
+        const res = await fetch("https://hotelroombooking-jmh1.onrender.com/api/hotels");
         const data = await res.json();
         setHotels(data);
       } catch (err) {
