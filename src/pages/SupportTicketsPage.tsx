@@ -23,7 +23,7 @@ export default function SupportTicketsPage() {
   useEffect(() => {
     const fetchMyTickets = async () => {
       try {
-        const res = await axios.get("http://localhost:8080/api/tickets/my", {
+        const res = await axios.get("https://hotelroombooking-jmh1.onrender.com/api/tickets/my", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

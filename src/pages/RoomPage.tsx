@@ -43,7 +43,7 @@ const BookRoomPage: React.FC = () => {
 
     const fetchRoom = async () => {
       try {
-        const res = await fetch(`http://localhost:8080/api/rooms/${roomId}`);
+        const res = await fetch(`https://hotelroombooking-jmh1.onrender.com/api/rooms/${roomId}`);
         if (!res.ok) throw new Error(`Failed to fetch room. Status: ${res.status}`);
         const data: Room = await res.json();
         setRoom(data);
@@ -83,7 +83,7 @@ const BookRoomPage: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      const res = await fetch(`http://localhost:8080/api/bookings`, {
+      const res = await fetch(`https://hotelroombooking-jmh1.onrender.com/api/bookings`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

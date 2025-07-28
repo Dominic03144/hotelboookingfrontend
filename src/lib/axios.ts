@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:8080/api", // ✅ This points to your backend server
+  baseURL: "https://hotelroombooking-jmh1.onrender.com/api", // ✅ This points to your backend server
   withCredentials: true, // ✅ If you use cookies/sessions
 });
 

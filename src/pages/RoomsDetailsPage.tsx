@@ -1,6 +1,6 @@
 // ✅ src/pages/RoomDetailsPage.tsx
 
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import api from "../utils/axios"; // ✅ use the configured api instance
 import { DateRange, type Range } from "react-date-range";
@@ -11,7 +11,6 @@ import "react-date-range/dist/theme/default.css";
 
 export default function RoomDetailsPage() {
   const { roomId } = useParams();
-  const navigate = useNavigate();
 
   const [dateRange, setDateRange] = useState<Range[]>([
     {

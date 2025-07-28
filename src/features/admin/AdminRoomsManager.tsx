@@ -8,17 +8,31 @@ import {
   type Room,
 } from "../../features/admin/RoomsApi";
 
+// DTOs expected by the backend
+type CreateRoomInput = {
+  roomType: string;
+  pricePerNight: number;
+  capacity: number;
+  amenities: string;
+  isAvailable: boolean;
+  imageUrl: string;
+  hotelId: number;
+};
+
+type UpdateRoomInput = CreateRoomInput & {
+  roomId: number;
+};
+
 export default function AdminRoomsPage() {
   const { data: rooms, isLoading, isError } = useGetRoomsQuery();
   const [createRoom] = useCreateRoomMutation();
   const [updateRoom] = useUpdateRoomMutation();
   const [deleteRoom] = useDeleteRoomMutation();
 
-  // State for Add Room form
   const [showAddForm, setShowAddForm] = useState(false);
-  const [newRoom, setNewRoom] = useState<Partial<Room>>({
+  const [newRoom, setNewRoom] = useState<CreateRoomInput>({
     roomType: "",
-    pricePerNight: "",
+    pricePerNight: 0,
     capacity: 1,
     amenities: "",
     isAvailable: true,
@@ -26,19 +40,12 @@ export default function AdminRoomsPage() {
     hotelId: 0,
   });
 
-  // State for Edit Room
-  const [editingRoom, setEditingRoom] = useState<Room | null>(null);
-
-  // Handlers for adding, updating, deleting rooms
+  const [editingRoom, setEditingRoom] = useState<UpdateRoomInput | null>(null);
 
   const handleAddRoom = async () => {
-    // Simple validation
-    if (
-      !newRoom.roomType ||
-      !newRoom.pricePerNight ||
-      !newRoom.capacity ||
-      !newRoom.hotelId
-    ) {
+    const { roomType, pricePerNight, capacity, hotelId } = newRoom;
+
+    if (!roomType || !pricePerNight || !capacity || !hotelId) {
       toast.error("Please fill all required fields (type, price, capacity, hotel)");
       return;
     }
@@ -46,15 +53,17 @@ export default function AdminRoomsPage() {
     try {
       await createRoom(newRoom).unwrap();
       toast.success("✅ Room added successfully");
+
       setNewRoom({
         roomType: "",
-        pricePerNight: "",
+        pricePerNight: 0,
         capacity: 1,
         amenities: "",
         isAvailable: true,
         imageUrl: "",
         hotelId: 0,
       });
+
       setShowAddForm(false);
     } catch {
       toast.error("❌ Failed to add room");
@@ -64,12 +73,9 @@ export default function AdminRoomsPage() {
   const handleUpdateRoom = async () => {
     if (!editingRoom) return;
 
-    if (
-      !editingRoom.roomType ||
-      !editingRoom.pricePerNight ||
-      !editingRoom.capacity ||
-      !editingRoom.hotelId
-    ) {
+    const { roomType, pricePerNight, capacity, hotelId } = editingRoom;
+
+    if (!roomType || !pricePerNight || !capacity || !hotelId) {
       toast.error("Please fill all required fields (type, price, capacity, hotel)");
       return;
     }
@@ -94,6 +100,19 @@ export default function AdminRoomsPage() {
     }
   };
 
+  const startEditing = (room: Room) => {
+    setEditingRoom({
+      roomId: room.roomId,
+      roomType: room.roomType,
+      pricePerNight: Number(room.pricePerNight),
+      capacity: Number(room.capacity),
+      amenities: room.amenities,
+      isAvailable: room.isAvailable,
+      imageUrl: room.imageUrl,
+      hotelId: Number(room.hotelId),
+    });
+  };
+
   if (isLoading) return <p>Loading rooms...</p>;
   if (isError) return <p>Error loading rooms.</p>;
 
@@ -114,71 +133,24 @@ export default function AdminRoomsPage() {
       {showAddForm && (
         <div className="border p-4 rounded bg-gray-50 mb-6 shadow">
           <h2 className="text-xl font-semibold mb-4">Add New Room</h2>
-
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <input
-              type="text"
-              placeholder="Room Type"
-              value={newRoom.roomType ?? ""}
-              onChange={(e) => setNewRoom({ ...newRoom, roomType: e.target.value })}
-              className="border p-2 rounded"
-            />
-            <input
-              type="text"
-              placeholder="Price Per Night"
-              value={newRoom.pricePerNight ?? ""}
-              onChange={(e) => setNewRoom({ ...newRoom, pricePerNight: e.target.value })}
-              className="border p-2 rounded"
-            />
-            <input
-              type="number"
-              min={1}
-              placeholder="Capacity"
-              value={newRoom.capacity ?? ""}
-              onChange={(e) =>
-                setNewRoom({ ...newRoom, capacity: Number(e.target.value) })
-              }
-              className="border p-2 rounded"
-            />
-            <input
-              type="text"
-              placeholder="Amenities (comma separated)"
-              value={newRoom.amenities ?? ""}
-              onChange={(e) => setNewRoom({ ...newRoom, amenities: e.target.value })}
-              className="border p-2 rounded"
-            />
-            <input
-              type="text"
-              placeholder="Image URL"
-              value={newRoom.imageUrl ?? ""}
-              onChange={(e) => setNewRoom({ ...newRoom, imageUrl: e.target.value })}
-              className="border p-2 rounded"
-            />
-            <input
-              type="number"
-              min={1}
-              placeholder="Hotel ID"
-              value={newRoom.hotelId ?? ""}
-              onChange={(e) =>
-                setNewRoom({ ...newRoom, hotelId: Number(e.target.value) })
-              }
-              className="border p-2 rounded"
-            />
+            <input type="text" placeholder="Room Type" value={newRoom.roomType}
+              onChange={(e) => setNewRoom({ ...newRoom, roomType: e.target.value })} className="border p-2 rounded" />
+            <input type="number" placeholder="Price Per Night" value={newRoom.pricePerNight}
+              onChange={(e) => setNewRoom({ ...newRoom, pricePerNight: Number(e.target.value) })} className="border p-2 rounded" />
+            <input type="number" placeholder="Capacity" value={newRoom.capacity}
+              onChange={(e) => setNewRoom({ ...newRoom, capacity: Number(e.target.value) })} className="border p-2 rounded" />
+            <input type="text" placeholder="Amenities" value={newRoom.amenities}
+              onChange={(e) => setNewRoom({ ...newRoom, amenities: e.target.value })} className="border p-2 rounded" />
+            <input type="text" placeholder="Image URL" value={newRoom.imageUrl}
+              onChange={(e) => setNewRoom({ ...newRoom, imageUrl: e.target.value })} className="border p-2 rounded" />
+            <input type="number" placeholder="Hotel ID" value={newRoom.hotelId}
+              onChange={(e) => setNewRoom({ ...newRoom, hotelId: Number(e.target.value) })} className="border p-2 rounded" />
           </div>
 
           <div className="mt-4 flex gap-4">
-            <button
-              onClick={handleAddRoom}
-              className="bg-green-600 text-white px-4 py-2 rounded"
-            >
-              Save Room
-            </button>
-            <button
-              onClick={() => setShowAddForm(false)}
-              className="bg-gray-400 px-4 py-2 rounded"
-            >
-              Cancel
-            </button>
+            <button onClick={handleAddRoom} className="bg-green-600 text-white px-4 py-2 rounded">Save Room</button>
+            <button onClick={() => setShowAddForm(false)} className="bg-gray-400 px-4 py-2 rounded">Cancel</button>
           </div>
         </div>
       )}
@@ -187,82 +159,24 @@ export default function AdminRoomsPage() {
       {editingRoom && (
         <div className="border p-4 rounded bg-yellow-50 mb-6 shadow">
           <h2 className="text-xl font-semibold mb-4">Edit Room</h2>
-
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <input
-              type="text"
-              placeholder="Room Type"
-              value={editingRoom.roomType}
-              onChange={(e) =>
-                setEditingRoom({ ...editingRoom, roomType: e.target.value })
-              }
-              className="border p-2 rounded"
-            />
-            <input
-              type="text"
-              placeholder="Price Per Night"
-              value={editingRoom.pricePerNight}
-              onChange={(e) =>
-                setEditingRoom({ ...editingRoom, pricePerNight: e.target.value })
-              }
-              className="border p-2 rounded"
-            />
-            <input
-              type="number"
-              min={1}
-              placeholder="Capacity"
-              value={editingRoom.capacity}
-              onChange={(e) =>
-                setEditingRoom({
-                  ...editingRoom,
-                  capacity: Number(e.target.value),
-                })
-              }
-              className="border p-2 rounded"
-            />
-            <input
-              type="text"
-              placeholder="Amenities (comma separated)"
-              value={editingRoom.amenities}
-              onChange={(e) =>
-                setEditingRoom({ ...editingRoom, amenities: e.target.value })
-              }
-              className="border p-2 rounded"
-            />
-            <input
-              type="text"
-              placeholder="Image URL"
-              value={editingRoom.imageUrl}
-              onChange={(e) =>
-                setEditingRoom({ ...editingRoom, imageUrl: e.target.value })
-              }
-              className="border p-2 rounded"
-            />
-            <input
-              type="number"
-              min={1}
-              placeholder="Hotel ID"
-              value={editingRoom.hotelId}
-              onChange={(e) =>
-                setEditingRoom({ ...editingRoom, hotelId: Number(e.target.value) })
-              }
-              className="border p-2 rounded"
-            />
+            <input type="text" value={editingRoom.roomType}
+              onChange={(e) => setEditingRoom({ ...editingRoom, roomType: e.target.value })} className="border p-2 rounded" />
+            <input type="number" value={editingRoom.pricePerNight}
+              onChange={(e) => setEditingRoom({ ...editingRoom, pricePerNight: Number(e.target.value) })} className="border p-2 rounded" />
+            <input type="number" value={editingRoom.capacity}
+              onChange={(e) => setEditingRoom({ ...editingRoom, capacity: Number(e.target.value) })} className="border p-2 rounded" />
+            <input type="text" value={editingRoom.amenities}
+              onChange={(e) => setEditingRoom({ ...editingRoom, amenities: e.target.value })} className="border p-2 rounded" />
+            <input type="text" value={editingRoom.imageUrl}
+              onChange={(e) => setEditingRoom({ ...editingRoom, imageUrl: e.target.value })} className="border p-2 rounded" />
+            <input type="number" value={editingRoom.hotelId}
+              onChange={(e) => setEditingRoom({ ...editingRoom, hotelId: Number(e.target.value) })} className="border p-2 rounded" />
           </div>
 
           <div className="mt-4 flex gap-4">
-            <button
-              onClick={handleUpdateRoom}
-              className="bg-blue-600 text-white px-4 py-2 rounded"
-            >
-              Save Changes
-            </button>
-            <button
-              onClick={() => setEditingRoom(null)}
-              className="bg-gray-400 px-4 py-2 rounded"
-            >
-              Cancel
-            </button>
+            <button onClick={handleUpdateRoom} className="bg-blue-600 text-white px-4 py-2 rounded">Save Changes</button>
+            <button onClick={() => setEditingRoom(null)} className="bg-gray-400 px-4 py-2 rounded">Cancel</button>
           </div>
         </div>
       )}
@@ -286,11 +200,7 @@ export default function AdminRoomsPage() {
             <tr key={room.roomId} className="border-b">
               <td className="border p-2 text-center">
                 {room.imageUrl ? (
-                  <img
-                    src={room.imageUrl}
-                    alt={room.roomType}
-                    className="w-20 h-auto rounded mx-auto"
-                  />
+                  <img src={room.imageUrl} alt={room.roomType} className="w-20 h-auto rounded mx-auto" />
                 ) : (
                   "No image"
                 )}
@@ -299,23 +209,11 @@ export default function AdminRoomsPage() {
               <td className="border p-2">${room.pricePerNight}</td>
               <td className="border p-2 text-center">{room.capacity}</td>
               <td className="border p-2">{room.amenities}</td>
-              <td className="border p-2 text-center">
-                {room.isAvailable ? "Yes" : "No"}
-              </td>
+              <td className="border p-2 text-center">{room.isAvailable ? "Yes" : "No"}</td>
               <td className="border p-2 text-center">{room.hotelId}</td>
               <td className="border p-2 space-x-2 text-center">
-                <button
-                  onClick={() => setEditingRoom(room)}
-                  className="bg-yellow-500 text-white px-3 py-1 rounded"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => handleDeleteRoom(room.roomId)}
-                  className="bg-red-600 text-white px-3 py-1 rounded"
-                >
-                  Delete
-                </button>
+                <button onClick={() => startEditing(room)} className="bg-yellow-500 text-white px-3 py-1 rounded">Edit</button>
+                <button onClick={() => handleDeleteRoom(room.roomId)} className="bg-red-600 text-white px-3 py-1 rounded">Delete</button>
               </td>
             </tr>
           ))}

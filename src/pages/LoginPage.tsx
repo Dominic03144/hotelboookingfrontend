@@ -42,7 +42,7 @@ export default function LoginPage() {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/auth/login",
+        "https://hotelroombooking-jmh1.onrender.com/api/auth/login",
         form,
         {
           validateStatus: () => true,
@@ -80,19 +80,17 @@ export default function LoginPage() {
           })
         );
 
-        toast.success("✅ Login successful!", {
-          autoClose: 2000,
-          onClose: () => {
-            if (user.role === "admin") {
-              navigate("/admin");
-            } else {
-              // ✅ Disallow accidental redirect to /admin for normal users
-              const unsafeFrom = from && (from === "/admin" || from.startsWith("/admin"));
-              const safeRedirect = unsafeFrom ? "/dashboard" : from;
-              navigate(safeRedirect, { replace: true });
-            }
-          },
-        });
+        toast.success("✅ Login successful!");
+
+        // ✅ Navigate immediately, do not wait for toast
+        if (user.role === "admin") {
+          navigate("/admin", { replace: true });
+        } else {
+          const unsafeFrom = from && (from === "/admin" || from.startsWith("/admin"));
+          const safeRedirect = unsafeFrom ? "/dashboard" : from;
+          navigate(safeRedirect, { replace: true });
+        }
+
       } else if (status === 401) {
         toast.error("❌ Invalid email or password.");
       } else {

@@ -1,12 +1,11 @@
 // ✅ src/pages/AdminRoomsPage.tsx
 
-import React from "react";
+
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
   useGetRoomsQuery,
   useDeleteRoomMutation,
-  type Room,
 } from "../features/admin/RoomsApi";
 import { useGetHotelsQuery } from "../features/admin/HotelApi"; // <-- you'll need this
 

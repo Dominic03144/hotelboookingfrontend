@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import api from "../lib/axios";
 
 import SupportTicketsPage from "./SupportTicketsPage";
 import ReviewsPage from "./ReviewsPage";
@@ -24,7 +24,7 @@ interface Payment {
   paymentStatus: "Pending" | "Completed" | "Failed";
   paymentDate?: string;
   amount: number | string;
-  receiptUrl?: string;  // Added optional receiptUrl here
+  receiptUrl?: string;
 }
 
 export default function UserDashboardPage() {
@@ -41,9 +41,7 @@ export default function UserDashboardPage() {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    if (!token) {
-      navigate("/login");
-    }
+    if (!token) navigate("/login");
   }, [token, navigate]);
 
   // BOOKINGS
@@ -55,9 +53,8 @@ export default function UserDashboardPage() {
   } = useQuery<Booking[]>({
     queryKey: ["myBookings"],
     queryFn: async () => {
-      const res = await axios.get("http://localhost:8080/api/bookings/my-bookings", {
+      const res = await api.get("/bookings/my-bookings", {
         headers: { Authorization: `Bearer ${token}` },
-        withCredentials: true,
       });
       return res.data.bookings || [];
     },
@@ -80,9 +77,8 @@ export default function UserDashboardPage() {
   } = useQuery<Payment[]>({
     queryKey: ["myPayments"],
     queryFn: async () => {
-      const res = await axios.get("http://localhost:8080/api/payments/my", {
+      const res = await api.get("/payments/my", {
         headers: { Authorization: `Bearer ${token}` },
-        withCredentials: true,
       });
       return res.data.payments || [];
     },
@@ -98,8 +94,8 @@ export default function UserDashboardPage() {
   const pastBookings = bookings.filter((b) => b.bookingStatus === "Completed");
   const cancelledBookings = bookings.filter((b) => b.bookingStatus === "Cancelled");
   const pendingPaymentsCount = payments.filter((p) => p.paymentStatus === "Pending").length;
-  const totalBookings = bookings.length;
 
+  const totalBookings = bookings.length;
   const supportTicketsCount = 2;
   const reviewsCount = 5;
 
@@ -233,15 +229,18 @@ export default function UserDashboardPage() {
         )}
 
         {activeTab === "payments" && (
-          <PaymentsPage payments={payments} isLoading={paymentsLoading} isError={paymentsError} error={paymentsErrorObj} />
+          <PaymentsPage
+            payments={payments}
+            isLoading={paymentsLoading}
+            isError={paymentsError}
+            error={paymentsErrorObj}
+          />
         )}
 
         {activeTab === "profile" && (
           <section>
             <h1 className="text-2xl font-bold mb-6">👤 Profile</h1>
-            <p>
-              Name: {firstName} {lastName}
-            </p>
+            <p>Name: {firstName} {lastName}</p>
             <p>Email: {email}</p>
             <Link to="/profile" className="inline-block mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
               ✏ Edit Profile

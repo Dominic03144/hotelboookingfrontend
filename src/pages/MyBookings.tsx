@@ -38,7 +38,7 @@ const MyBookings: React.FC = () => {
 
       try {
         const res = await axios.get(
-          "http://localhost:8080/api/bookings/my-bookings", // ✅ CORRECT PATH
+          "https://hotelroombooking-jmh1.onrender.com/api/bookings/my-bookings", // ✅ CORRECT PATH
           {
             headers: {
               Authorization: `Bearer ${token}`,

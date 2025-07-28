@@ -1,4 +1,4 @@
-import React from "react";
+
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
@@ -16,7 +16,7 @@ export default function ReviewsPage() {
   const { data: reviews = [], isLoading, isError, error } = useQuery<Review[]>({
     queryKey: ["allReviews"],
     queryFn: async () => {
-      const res = await axios.get("http://localhost:8080/api/reviews");
+      const res = await axios.get("https://hotelroombooking-jmh1.onrender.com/api/reviews");
       return res.data.reviews || [];
     },
   });

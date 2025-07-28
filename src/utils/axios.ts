@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:8080/api",
+  baseURL: "https://hotelroombooking-jmh1.onrender.com",
   withCredentials: true, // if you store JWT in cookies
 });
 
