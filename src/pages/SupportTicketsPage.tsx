@@ -19,17 +19,19 @@ export default function SupportTicketsPage() {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
 
-  // ✅ Fetch ONLY current user's tickets using `/my`
   useEffect(() => {
     const fetchMyTickets = async () => {
       try {
-        const res = await axios.get("https://hotelroombooking-jmh1.onrender.com/api/tickets/my", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/tickets/my`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            withCredentials: true,
+          }
+        );
 
-        // ✅ Defensive: always set array
         const fetchedTickets = Array.isArray(res.data.tickets)
           ? res.data.tickets
           : [];
@@ -50,7 +52,6 @@ export default function SupportTicketsPage() {
     }
   }, [token]);
 
-  // ✅ Submit new ticket
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -59,14 +60,14 @@ export default function SupportTicketsPage() {
       return;
     }
 
-    if (!userId) {
-      toast.error("User ID not found. Please log in again.");
+    if (!userId || !token) {
+      toast.error("Authentication failed. Please log in again.");
       return;
     }
 
     try {
       const res = await axios.post(
-        "http://localhost:8080/api/tickets",
+        `${import.meta.env.VITE_API_URL}/tickets`,
         {
           userId: Number(userId),
           subject: subject.trim(),
@@ -76,26 +77,19 @@ export default function SupportTicketsPage() {
           headers: {
             Authorization: `Bearer ${token}`,
           },
+          withCredentials: true,
         }
       );
 
       toast.success("✅ Ticket submitted!");
-
-      // ✅ Backend returns: { ticket: {...} }
       const newTicket: Ticket = res.data.ticket || res.data;
 
-      // ✅ Defensive: always prepend to array
-      setTickets((prev) => [newTicket, ...(prev || [])]);
-
-      // Clear form
+      setTickets((prev) => [newTicket, ...prev]);
       setSubject("");
       setMessage("");
     } catch (err: any) {
       console.error("❌ Error submitting ticket:", err);
-      if (err.response?.data) {
-        console.log("Backend response:", err.response.data);
-      }
-      toast.error("Failed to submit ticket.");
+      toast.error(err?.response?.data?.message || "Failed to submit ticket.");
     }
   };
 

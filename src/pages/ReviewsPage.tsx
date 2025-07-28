@@ -1,7 +1,7 @@
-
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
+// ✅ Define the Review type
 interface Review {
   reviewId: number;
   hotelId: number;
@@ -16,14 +16,18 @@ export default function ReviewsPage() {
   const { data: reviews = [], isLoading, isError, error } = useQuery<Review[]>({
     queryKey: ["allReviews"],
     queryFn: async () => {
-      const res = await axios.get("https://hotelroombooking-jmh1.onrender.com/api/reviews");
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_URL}/reviews`,
+        {
+          withCredentials: true, // optional, only if you're using auth cookies
+        }
+      );
       return res.data.reviews || [];
     },
   });
 
   if (isLoading) return <p>Loading reviews...</p>;
   if (isError) return <p className="text-red-600">Error: {String(error)}</p>;
-
   if (!reviews.length) return <p>No reviews found.</p>;
 
   return (

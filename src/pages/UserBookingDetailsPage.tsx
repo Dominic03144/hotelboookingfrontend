@@ -32,13 +32,13 @@ export default function BookingDetailsPage() {
     queryKey: ["booking", bookingId],
     queryFn: async () => {
       const res = await axios.get(
-        `https://hotelroombooking-jmh1.onrender.com/api/bookings/${bookingId}`,
+        `${import.meta.env.VITE_API_URL}/bookings/${bookingId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
           withCredentials: true,
         }
       );
-      return res.data.booking; // adjust if your API shape is different
+      return res.data.booking;
     },
     enabled: !!bookingId && !!token,
   });
@@ -56,12 +56,8 @@ export default function BookingDetailsPage() {
     <div className="max-w-3xl mx-auto p-6">
       <h1 className="text-2xl font-bold mb-4">Booking Details</h1>
 
-      <h2 className="text-xl font-semibold mb-2">
-        Room: {data.room.name}
-      </h2>
-      {data.room.description && (
-        <p className="mb-2">{data.room.description}</p>
-      )}
+      <h2 className="text-xl font-semibold mb-2">Room: {data.room.name}</h2>
+      {data.room.description && <p className="mb-2">{data.room.description}</p>}
 
       <p>
         <strong>Check-in:</strong> {data.checkInDate}
@@ -85,9 +81,7 @@ export default function BookingDetailsPage() {
       </p>
       <p
         className={`mt-2 font-semibold ${
-          data.status === "cancelled"
-            ? "text-red-600"
-            : "text-green-600"
+          data.status === "cancelled" ? "text-red-600" : "text-green-600"
         }`}
       >
         Status: {data.status}

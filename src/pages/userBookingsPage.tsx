@@ -29,6 +29,8 @@ export default function UserBookingsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const API_URL = import.meta.env.VITE_API_URL;
+
   async function fetchBookings() {
     try {
       setLoading(true);
@@ -41,14 +43,11 @@ export default function UserBookingsPage() {
         return;
       }
 
-      const res = await axios.get(
-        "https://hotelroombooking-jmh1.onrender.com/api/bookings/my-bookings",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await axios.get(`${API_URL}/bookings/my-bookings`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (res.data?.success && Array.isArray(res.data.bookings)) {
         setBookings(res.data.bookings);
@@ -68,14 +67,11 @@ export default function UserBookingsPage() {
       const token = localStorage.getItem("token");
       if (!token) return;
 
-      const res = await axios.get(
-        "http://localhost:8080/api/payments/my-payments",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await axios.get(`${API_URL}/payments/my-payments`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (Array.isArray(res.data.payments)) {
         setPayments(res.data.payments);
@@ -94,7 +90,7 @@ export default function UserBookingsPage() {
     try {
       const token = localStorage.getItem("token");
       await axios.patch(
-        `http://localhost:8080/api/bookings/${bookingId}/cancel`,
+        `${API_URL}/bookings/${bookingId}/cancel`,
         {},
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -110,7 +106,7 @@ export default function UserBookingsPage() {
     try {
       const token = localStorage.getItem("token");
       await axios.patch(
-        `http://localhost:8080/api/bookings/${bookingId}/confirm`,
+        `${API_URL}/bookings/${bookingId}/confirm`,
         {},
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -148,7 +144,7 @@ export default function UserBookingsPage() {
           </thead>
           <tbody>
             {bookings.map((b) => {
-              const payment = payments.find(p => p.bookingId === b.bookingId);
+              const payment = payments.find((p) => p.bookingId === b.bookingId);
               return (
                 <tr key={b.bookingId} className="hover:bg-gray-50">
                   <td className="border p-3">{b.hotelName}</td>

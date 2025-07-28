@@ -1,5 +1,3 @@
-// ✅ src/pages/MyBookings.tsx
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -19,7 +17,7 @@ interface Booking {
     name: string;
     price: number;
   };
-  status: string; // Example: 'confirmed', 'cancelled'
+  status: string; // 'confirmed' | 'cancelled'
 }
 
 const MyBookings: React.FC = () => {
@@ -38,7 +36,7 @@ const MyBookings: React.FC = () => {
 
       try {
         const res = await axios.get(
-          "https://hotelroombooking-jmh1.onrender.com/api/bookings/my-bookings", // ✅ CORRECT PATH
+          `${import.meta.env.VITE_API_URL}/bookings/my-bookings`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -78,7 +76,7 @@ const MyBookings: React.FC = () => {
 
     try {
       const res = await axios.patch(
-        `http://localhost:8080/api/bookings/${bookingId}/cancel`,
+        `${import.meta.env.VITE_API_URL}/bookings/${bookingId}/cancel`,
         {},
         {
           headers: {
@@ -91,7 +89,6 @@ const MyBookings: React.FC = () => {
       console.log("✅ Cancel response:", res.data);
       toast.success(res.data.message || "Booking cancelled.");
 
-      // ✅ Mark cancelled in local state
       setBookings((prev) =>
         prev.map((b) =>
           b.bookingId === bookingId ? { ...b, status: "cancelled" } : b
@@ -139,7 +136,8 @@ const MyBookings: React.FC = () => {
               </p>
               {booking.specialRequests && (
                 <p>
-                  <strong>Special Requests:</strong> {booking.specialRequests}
+                  <strong>Special Requests:</strong>{" "}
+                  {booking.specialRequests}
                 </p>
               )}
               <p className="text-sm text-gray-500">

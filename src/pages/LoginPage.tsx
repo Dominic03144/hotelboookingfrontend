@@ -1,5 +1,3 @@
-// ✅ src/pages/LoginPage.tsx
-
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
@@ -42,7 +40,7 @@ export default function LoginPage() {
 
     try {
       const response = await axios.post(
-        "https://hotelroombooking-jmh1.onrender.com/api/auth/login",
+        `${import.meta.env.VITE_API_URL}/auth/login`,
         form,
         {
           validateStatus: () => true,
@@ -82,15 +80,10 @@ export default function LoginPage() {
 
         toast.success("✅ Login successful!");
 
-        // ✅ Navigate immediately, do not wait for toast
-        if (user.role === "admin") {
-          navigate("/admin", { replace: true });
-        } else {
-          const unsafeFrom = from && (from === "/admin" || from.startsWith("/admin"));
-          const safeRedirect = unsafeFrom ? "/dashboard" : from;
-          navigate(safeRedirect, { replace: true });
-        }
+        const unsafeFrom = from && (from === "/admin" || from.startsWith("/admin"));
+        const safeRedirect = user.role === "admin" ? "/admin" : unsafeFrom ? "/dashboard" : from;
 
+        navigate(safeRedirect, { replace: true });
       } else if (status === 401) {
         toast.error("❌ Invalid email or password.");
       } else {

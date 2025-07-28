@@ -34,7 +34,7 @@ export default function AdminProfilePage() {
 
     try {
       const res = await axios.put(
-        `https://hotelroombooking-jmh1.onrender.com/api/admin/profile`,
+        `${import.meta.env.VITE_API_URL}/admin/profile`,
         {
           firstName: form.firstName.trim(),
           lastName: form.lastName.trim(),

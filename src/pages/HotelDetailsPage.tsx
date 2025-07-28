@@ -12,12 +12,10 @@ import coastalParadiseHero from "../assets/hotels/coastal-paradise.jpg";
 import coastalParadiseGallery1 from "../assets/hotels/coastal-paradise-gallery1.jpg";
 import coastalParadiseGallery2 from "../assets/hotels/coastal-paradise-gallery2.jpg";
 
-// ✅ NEW Weston Hotel
 import westonHero from "../assets/hotels/weston-hero.jpg";
 import westonGallery1 from "../assets/hotels/weston-gallery1.jpg";
 import westonGallery2 from "../assets/hotels/weston-gallery2.jpg";
 
-// ✅ NEW Hustler Hotel
 import hustlerHero from "../assets/hotels/hustler-hero.jpg";
 import hustlerGallery1 from "../assets/hotels/hustler-gallery1.jpg";
 import hustlerGallery2 from "../assets/hotels/hustler-gallery2.jpg";
@@ -35,18 +33,18 @@ const HotelDetailsPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const API_BASE = import.meta.env.VITE_API_URL;
+
   useEffect(() => {
     const fetchHotelAndReviews = async () => {
       try {
-        const hotelRes = await fetch(`https://hotelroombooking-jmh1.onrender.com/api/hotels/${id}`);
+        const hotelRes = await fetch(`${API_BASE}/hotels/${id}`);
         if (!hotelRes.ok)
           throw new Error(`Hotel fetch error! Status: ${hotelRes.status}`);
         const hotelData = await hotelRes.json();
         setHotel(hotelData);
 
-        const reviewsRes = await fetch(
-          `https://hotelroombooking-jmh1.onrender.com/api/hotels/${id}/reviews`
-        );
+        const reviewsRes = await fetch(`${API_BASE}/hotels/${id}/reviews`);
         if (!reviewsRes.ok)
           throw new Error(`Reviews fetch error! Status: ${reviewsRes.status}`);
         const reviewsData = await reviewsRes.json();
@@ -64,7 +62,7 @@ const HotelDetailsPage: React.FC = () => {
       setError("No hotel ID found in URL.");
       setLoading(false);
     }
-  }, [id]);
+  }, [id, API_BASE]);
 
   if (loading) {
     return (
@@ -93,26 +91,21 @@ const HotelDetailsPage: React.FC = () => {
   let heroImage = hotel.imageUrl;
   let gallery: string[] = [];
 
-  if (hotel.hotelName.toLowerCase().includes("grand")) {
+  const name = hotel.hotelName.toLowerCase();
+  if (name.includes("grand")) {
     heroImage = grandPlazaHero;
     gallery = [grandPlazaHero, grandPlazaGallery1, grandPlazaGallery2];
-  } else if (hotel.hotelName.toLowerCase().includes("coastal")) {
+  } else if (name.includes("coastal")) {
     heroImage = coastalParadiseHero;
-    gallery = [
-      coastalParadiseHero,
-      coastalParadiseGallery1,
-      coastalParadiseGallery2,
-    ];
-  } else if (hotel.hotelName.toLowerCase().includes("weston")) {
+    gallery = [coastalParadiseHero, coastalParadiseGallery1, coastalParadiseGallery2];
+  } else if (name.includes("weston")) {
     heroImage = westonHero;
     gallery = [westonHero, westonGallery1, westonGallery2];
-  } else if (hotel.hotelName.toLowerCase().includes("hustler")) {
+  } else if (name.includes("hustler")) {
     heroImage = hustlerHero;
     gallery = [hustlerHero, hustlerGallery1, hustlerGallery2];
   } else {
-    heroImage =
-      hotel.imageUrl ||
-      "https://via.placeholder.com/1200x500?text=No+Image";
+    heroImage = hotel.imageUrl || "https://via.placeholder.com/1200x500?text=No+Image";
     gallery = [
       heroImage,
       "https://source.unsplash.com/random/800x400?hotel",
@@ -130,7 +123,6 @@ const HotelDetailsPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      {/* ✅ Hero + CTA with hover */}
       <div className="relative overflow-hidden">
         <img
           src={heroImage}
@@ -147,34 +139,24 @@ const HotelDetailsPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Main content */}
       <div className="max-w-6xl mx-auto p-6 md:p-10">
-        {/* Title & quick info */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
           <h1 className="text-3xl md:text-4xl font-bold text-blue-800 mb-4 md:mb-0">
             {hotel.hotelName}
           </h1>
           <div className="flex flex-wrap gap-4 text-gray-700">
-            <span className="bg-blue-50 px-3 py-1 rounded-full shadow text-sm">
-              ⭐ {hotel.rating}
-            </span>
-            <span className="bg-blue-50 px-3 py-1 rounded-full shadow text-sm">
-              📍 {hotel.city}
-            </span>
-            <span className="bg-blue-50 px-3 py-1 rounded-full shadow text-sm">
-              🏷️ {hotel.category}
-            </span>
+            <span className="bg-blue-50 px-3 py-1 rounded-full shadow text-sm">⭐ {hotel.rating}</span>
+            <span className="bg-blue-50 px-3 py-1 rounded-full shadow text-sm">📍 {hotel.city}</span>
+            <span className="bg-blue-50 px-3 py-1 rounded-full shadow text-sm">🏷️ {hotel.category}</span>
           </div>
         </div>
 
-        {/* About & Details */}
         <div className="grid md:grid-cols-3 gap-8 mb-10">
           <div className="md:col-span-2 space-y-4">
             <h2 className="text-xl font-semibold text-blue-700">About</h2>
             <p className="text-gray-700">
-              Enjoy a luxurious stay at <strong>{hotel.hotelName}</strong> in{" "}
-              {hotel.city}. Expect premium amenities, comfort, and exceptional
-              service.
+              Enjoy a luxurious stay at <strong>{hotel.hotelName}</strong> in {hotel.city}. Expect
+              premium amenities, comfort, and exceptional service.
             </p>
           </div>
           <div className="space-y-3">
@@ -196,7 +178,6 @@ const HotelDetailsPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Amenities */}
         <div className="mb-10">
           <h2 className="text-xl font-semibold text-blue-700 mb-4">Amenities</h2>
           <ul className="flex flex-wrap gap-3">
@@ -211,7 +192,6 @@ const HotelDetailsPage: React.FC = () => {
           </ul>
         </div>
 
-        {/* ✅ Gallery with hover */}
         <div className="mb-10">
           <h2 className="text-xl font-semibold text-blue-700 mb-4">Gallery</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -231,7 +211,6 @@ const HotelDetailsPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Reviews */}
         <div className="mb-10">
           <h2 className="text-xl font-semibold text-blue-700 mb-4">Reviews</h2>
           {reviews.length > 0 ? (
@@ -239,9 +218,7 @@ const HotelDetailsPage: React.FC = () => {
               {reviews.map((review, idx) => (
                 <div key={idx} className="bg-gray-50 p-4 rounded shadow">
                   <p className="font-semibold">{review.name}</p>
-                  <p className="text-yellow-500">
-                    {"⭐".repeat(review.stars)}
-                  </p>
+                  <p className="text-yellow-500">{"⭐".repeat(review.stars)}</p>
                   <p className="text-gray-700">{review.comment}</p>
                 </div>
               ))}

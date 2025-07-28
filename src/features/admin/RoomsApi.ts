@@ -1,11 +1,11 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import type { RootState } from "../../app/store"; // ✅ import RootState type
+import type { RootState } from "../../app/store";
 
-// Backend response shape — pricePerNight is string (numeric as string)
+// ✅ Room interface matches backend response
 export interface Room {
   roomId: number;
   roomType: string;
-  pricePerNight: string; // price comes as string from backend
+  pricePerNight: string; // received as string from backend
   capacity: number;
   amenities: string;
   isAvailable: boolean;
@@ -19,7 +19,7 @@ export interface Room {
   hotelContactPhone: string;
 }
 
-// Input shape for creating a new room (pricePerNight is number for input validation)
+// ✅ Shape for creating a room
 export interface CreateRoomInput {
   roomType: string;
   pricePerNight: number;
@@ -30,7 +30,7 @@ export interface CreateRoomInput {
   hotelId: number;
 }
 
-// Input shape for updating a room - all optional except roomId
+// ✅ Shape for updating a room
 export interface UpdateRoomInput extends Partial<CreateRoomInput> {
   roomId: number;
 }
@@ -38,45 +38,49 @@ export interface UpdateRoomInput extends Partial<CreateRoomInput> {
 export const roomsApi = createApi({
   reducerPath: "roomsApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:8080/api",
+    baseUrl: `${import.meta.env.VITE_API_URL}/api`, // ✅ Uses env var
+    credentials: "include",
     prepareHeaders: (headers, { getState }) => {
-      const token = (getState() as RootState).auth.user?.token;
+      const state = getState() as RootState;
+      const token = state.auth?.user?.token;
+
       if (token) {
         headers.set("Authorization", `Bearer ${token}`);
       }
+
       return headers;
     },
   }),
   tagTypes: ["Rooms"],
   endpoints: (builder) => ({
-    // GET all rooms
+    // ✅ Get all rooms
     getRooms: builder.query<Room[], void>({
       query: () => "/rooms",
       providesTags: ["Rooms"],
     }),
 
-    // GET single room by ID
+    // ✅ Get one room by ID
     getRoomById: builder.query<Room, number>({
-      query: (id) => `/rooms/${id}`,
+      query: (roomId) => `/rooms/${roomId}`,
       providesTags: (_result, _error, id) => [{ type: "Rooms", id }],
     }),
 
-    // POST create new room
+    // ✅ Create a new room
     createRoom: builder.mutation<Room, CreateRoomInput>({
-      query: (newRoom) => ({
+      query: (room) => ({
         url: "/rooms",
         method: "POST",
-        body: newRoom,
+        body: room,
       }),
       invalidatesTags: ["Rooms"],
     }),
 
-    // PUT update room by ID
+    // ✅ Update room by ID
     updateRoom: builder.mutation<Room, UpdateRoomInput>({
-      query: ({ roomId, ...updatedRoom }) => ({
+      query: ({ roomId, ...data }) => ({
         url: `/rooms/${roomId}`,
         method: "PUT",
-        body: updatedRoom,
+        body: data,
       }),
       invalidatesTags: (_result, _error, { roomId }) => [
         { type: "Rooms", id: roomId },
@@ -84,13 +88,16 @@ export const roomsApi = createApi({
       ],
     }),
 
-    // DELETE room by ID
+    // ✅ Delete room by ID
     deleteRoom: builder.mutation<{ success: boolean; id: number }, number>({
-      query: (id) => ({
-        url: `/rooms/${id}`,
+      query: (roomId) => ({
+        url: `/rooms/${roomId}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["Rooms"],
+      invalidatesTags: (_result, _error, id) => [
+        { type: "Rooms", id },
+        "Rooms",
+      ],
     }),
   }),
 });

@@ -27,7 +27,11 @@ const AdminBookingDetailPage: React.FC = () => {
   const fetchBooking = useCallback(async () => {
     try {
       if (!id) throw new Error("Booking ID is missing");
-      const res = await fetch(`https://hotelroombooking-jmh1.onrender.com/api/bookings/${id}`);
+
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/bookings/${id}`, {
+        credentials: "include",
+      });
+
       if (!res.ok) throw new Error(`Failed to fetch booking: ${res.statusText}`);
       const data: BookingDetail = await res.json();
       setBooking(data);
@@ -52,14 +56,14 @@ const AdminBookingDetailPage: React.FC = () => {
     if (!confirmed) return;
 
     try {
-      const res = await fetch(
-        `http://localhost:8080/api/bookings/${booking.bookingId}`,
-        {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ status: newStatus }),
-        }
-      );
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/bookings/${booking.bookingId}`, {
+        method: "PATCH",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ status: newStatus }),
+      });
 
       if (!res.ok) throw new Error("Failed to update status");
 

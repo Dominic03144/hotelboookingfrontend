@@ -9,6 +9,8 @@ type Hotel = {
   hotelName: string;
 };
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 export default function HotelRoomsPage() {
   const { hotelId } = useParams<{ hotelId: string }>();
   const [rooms, setRooms] = useState<Room[]>([]);
@@ -27,14 +29,14 @@ export default function HotelRoomsPage() {
       try {
         setLoading(true);
 
-        const hotelRes = await fetch(`https://hotelroombooking-jmh1.onrender.com/api/hotels`);
+        const hotelRes = await fetch(`${API_URL}/hotels`);
         if (!hotelRes.ok) throw new Error("Failed to fetch hotels");
         const hotelData: Hotel[] = await hotelRes.json();
         const currentHotel = hotelData.find(h => h.hotelId === Number(hotelId));
         if (!currentHotel) throw new Error("Hotel not found");
         setHotel(currentHotel);
 
-        const roomRes = await fetch(`https://hotelroombooking-jmh1.onrender.com/api/rooms`);
+        const roomRes = await fetch(`${API_URL}/rooms`);
         if (!roomRes.ok) throw new Error("Failed to fetch rooms");
         const allRooms: any[] = await roomRes.json();
 

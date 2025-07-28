@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import { toast } from "react-toastify";
-import type { Hotel } from "../../types/hotel";  // adjust path if needed
+import type { Hotel } from "../../types/hotel"; // Adjust the import path as needed
+
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 interface EditHotelFormProps {
   hotel: Hotel;
@@ -35,7 +37,7 @@ export default function EditHotelForm({
     };
 
     try {
-      const res = await fetch(`http://localhost:8080/api/hotels/${hotel.hotelId}`, {
+      const res = await fetch(`${API_BASE_URL}/api/hotels/${hotel.hotelId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -61,6 +63,7 @@ export default function EditHotelForm({
   return (
     <div className="mt-6 border p-4 rounded shadow bg-yellow-50">
       <h2 className="text-xl mb-2 font-semibold">✏️ Edit Hotel</h2>
+
       <input
         type="text"
         value={form.hotelName}
@@ -68,6 +71,7 @@ export default function EditHotelForm({
         className="border p-2 rounded w-full mb-2"
         placeholder="Hotel Name"
       />
+
       <input
         type="text"
         value={form.address}
@@ -75,6 +79,7 @@ export default function EditHotelForm({
         className="border p-2 rounded w-full mb-2"
         placeholder="Address"
       />
+
       <input
         type="text"
         value={form.city}
@@ -82,6 +87,7 @@ export default function EditHotelForm({
         className="border p-2 rounded w-full mb-2"
         placeholder="City"
       />
+
       <input
         type="text"
         value={form.location}
@@ -89,6 +95,7 @@ export default function EditHotelForm({
         className="border p-2 rounded w-full mb-2"
         placeholder="Location"
       />
+
       <input
         type="text"
         value={form.contactPhone ?? ""}
@@ -96,6 +103,7 @@ export default function EditHotelForm({
         className="border p-2 rounded w-full mb-2"
         placeholder="Contact Phone"
       />
+
       <input
         type="text"
         value={form.category ?? ""}
@@ -103,6 +111,7 @@ export default function EditHotelForm({
         className="border p-2 rounded w-full mb-2"
         placeholder="Category"
       />
+
       <input
         type="number"
         step="0.1"
@@ -116,6 +125,7 @@ export default function EditHotelForm({
         className="border p-2 rounded w-full mb-2"
         placeholder="Rating"
       />
+
       <input
         type="text"
         value={form.imageUrl}
@@ -123,6 +133,7 @@ export default function EditHotelForm({
         className="border p-2 rounded w-full mb-2"
         placeholder="Image URL"
       />
+
       <div className="flex gap-2">
         <button
           onClick={handleSave}
@@ -131,6 +142,7 @@ export default function EditHotelForm({
         >
           {saving ? "Saving..." : "Save Changes"}
         </button>
+
         <button onClick={onClose} className="bg-gray-400 px-4 py-2 rounded">
           Cancel
         </button>

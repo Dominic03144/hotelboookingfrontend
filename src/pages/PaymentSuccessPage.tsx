@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/authContext"; // ✅ use your AuthContext!
+import { useAuth } from "../context/authContext";
 
 interface PaymentStatus {
   paymentStatus: string;
@@ -12,7 +12,6 @@ export default function PaymentSuccessPage() {
   const navigate = useNavigate();
   const sessionId = new URLSearchParams(search).get("session_id")?.trim() || "";
 
-  // ✅ Pull token + rehydrated from your AuthContext
   const { token, rehydrated } = useAuth();
 
   const [status, setStatus] = useState<PaymentStatus | null>(null);
@@ -20,7 +19,6 @@ export default function PaymentSuccessPage() {
   const [error, setError] = useState<string | null>(null);
   const [retryCount, setRetryCount] = useState(0);
 
-  // ✅ Fetch payment status from backend using valid token
   const fetchPaymentStatus = useCallback(async () => {
     if (!sessionId) {
       setError("Missing or invalid session ID in URL.");
@@ -38,11 +36,14 @@ export default function PaymentSuccessPage() {
     setError(null);
 
     try {
-      const res = await fetch(`https://hotelroombooking-jmh1.onrender.com/api/payments/${sessionId}/status`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/payments/${sessionId}/status`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (!res.ok) {
         if (res.status === 401) {
@@ -67,9 +68,8 @@ export default function PaymentSuccessPage() {
     }
   }, [sessionId, token]);
 
-  // ✅ Wait for auth to rehydrate before fetching
   useEffect(() => {
-    if (!rehydrated) return; // Don't run until ready!
+    if (!rehydrated) return;
 
     fetchPaymentStatus();
 

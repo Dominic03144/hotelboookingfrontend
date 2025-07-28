@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
-import type { Room } from "../types/room";
 import { differenceInDays, format } from "date-fns";
-import { useAuth } from "../context/authContext"; // ✅ import your auth hook
+import type { Room } from "../types/room";
+import { useAuth } from "../context/authContext";
 
 const BookRoomPage: React.FC = () => {
   const { roomId } = useParams<{ roomId: string }>();
   const navigate = useNavigate();
   const location = useLocation();
-  const { user } = useAuth(); // ✅ get user
+  const { user } = useAuth();
 
   const [room, setRoom] = useState<Room | null>(null);
   const [loading, setLoading] = useState(true);
@@ -20,7 +20,7 @@ const BookRoomPage: React.FC = () => {
   const [guests, setGuests] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // ✅ Redirect if not logged in
+  // 🔐 Redirect if not logged in
   useEffect(() => {
     if (!user) {
       toast.info("Please log in to continue.");
@@ -34,6 +34,7 @@ const BookRoomPage: React.FC = () => {
     }
   }, [user, navigate, location]);
 
+  // 🔄 Fetch room details
   useEffect(() => {
     if (!roomId) {
       setError("No room ID provided.");
@@ -43,7 +44,7 @@ const BookRoomPage: React.FC = () => {
 
     const fetchRoom = async () => {
       try {
-        const res = await fetch(`https://hotelroombooking-jmh1.onrender.com/api/rooms/${roomId}`);
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/rooms/${roomId}`);
         if (!res.ok) throw new Error(`Failed to fetch room. Status: ${res.status}`);
         const data: Room = await res.json();
         setRoom(data);
@@ -83,7 +84,7 @@ const BookRoomPage: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      const res = await fetch(`https://hotelroombooking-jmh1.onrender.com/api/bookings`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/bookings`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

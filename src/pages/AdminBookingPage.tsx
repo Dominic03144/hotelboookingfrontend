@@ -18,7 +18,6 @@ type AdminBooking = {
 
   roomType: string;
   pricePerNight: string;
-
   hotelName: string;
 };
 
@@ -29,7 +28,7 @@ export default function AdminBookingsPage() {
 
   const fetchBookings = async () => {
     try {
-      const res = await fetch("https://hotelroombooking-jmh1.onrender.com/api/bookings", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/bookings`, {
         credentials: "include",
       });
       if (!res.ok) throw new Error("Failed to fetch bookings");
@@ -48,7 +47,7 @@ export default function AdminBookingsPage() {
 
   const handleStatusChange = async (bookingId: number, newStatus: string) => {
     try {
-      const res = await fetch(`http://localhost:8080/api/bookings/${bookingId}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/bookings/${bookingId}`, {
         method: "PATCH",
         credentials: "include",
         headers: {
@@ -69,7 +68,7 @@ export default function AdminBookingsPage() {
   const handleDelete = async (bookingId: number) => {
     if (!window.confirm("Are you sure you want to delete this booking?")) return;
     try {
-      const res = await fetch(`http://localhost:8080/api/bookings/${bookingId}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/bookings/${bookingId}`, {
         method: "DELETE",
         credentials: "include",
       });

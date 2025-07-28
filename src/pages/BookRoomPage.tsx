@@ -4,6 +4,7 @@ import { differenceInDays, format } from "date-fns";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import type { Room } from "../types/room";
+import API from "../utils/axios"; // ✅ custom Axios instance
 
 const BookRoomPage: React.FC = () => {
   const { roomId } = useParams<{ roomId: string }>();
@@ -27,12 +28,10 @@ const BookRoomPage: React.FC = () => {
 
     const fetchRoom = async () => {
       try {
-        const res = await fetch(`https://hotelroombooking-jmh1.onrender.com/api/rooms/${roomId}`);
-        if (!res.ok) throw new Error(`Failed to fetch room. Status: ${res.status}`);
-        const data: Room = await res.json();
-        setRoom(data);
+        const res = await API.get(`/rooms/${roomId}`);
+        setRoom(res.data);
       } catch (err: any) {
-        setError(err.message || "Failed to load room");
+        setError(err.response?.data?.message || "Failed to load room.");
       } finally {
         setLoading(false);
       }
@@ -52,7 +51,7 @@ const BookRoomPage: React.FC = () => {
   const handleBook = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!roomId || !room) return;
+    if (!room || !roomId) return;
 
     if (!checkInDate || !checkOutDate) {
       toast.error("Please select both check-in and check-out dates.");
@@ -67,34 +66,18 @@ const BookRoomPage: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      const res = await fetch(`http://localhost:8080/api/bookings`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          roomId: room.roomId,
-          checkInDate,
-          checkOutDate,
-          guests,
-          totalAmount: totalPrice,
-        }),
+      const res = await API.post("/bookings", {
+        roomId: room.roomId,
+        checkInDate,
+        checkOutDate,
+        guests,
+        totalAmount: totalPrice,
       });
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        toast.error(data.message || "Failed to create booking.");
-        return;
-      }
-
-      toast.success("Booking created successfully! Redirecting to payment...");
-      navigate(`/payment/${data.booking.bookingId}`);
+      toast.success("✅ Booking created! Redirecting to payment...");
+      navigate(`/payment/${res.data.booking.bookingId}`);
     } catch (err: any) {
-      console.error(err);
-      toast.error(err.message || "Booking failed.");
+      toast.error(err.response?.data?.message || "❌ Booking failed.");
     } finally {
       setIsSubmitting(false);
     }
@@ -121,9 +104,7 @@ const BookRoomPage: React.FC = () => {
 
       <form onSubmit={handleBook} className="mt-6 space-y-4">
         <div>
-          <label className="block mb-1 font-medium text-gray-700">
-            Check-In Date
-          </label>
+          <label className="block mb-1 font-medium text-gray-700">Check-In Date</label>
           <input
             type="date"
             value={checkInDate}
@@ -135,9 +116,7 @@ const BookRoomPage: React.FC = () => {
         </div>
 
         <div>
-          <label className="block mb-1 font-medium text-gray-700">
-            Check-Out Date
-          </label>
+          <label className="block mb-1 font-medium text-gray-700">Check-Out Date</label>
           <input
             type="date"
             value={checkOutDate}

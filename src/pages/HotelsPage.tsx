@@ -8,6 +8,7 @@ import coastalParadiseImg from "../assets/hotels/coastal-paradise.jpg";
 import westonHotelImg from "../assets/hotels/weston-hotel.jpg";
 import hustlerHotelImg from "../assets/hotels/hustler-hotel.jpg";
 
+// ✅ Map hotel names to images
 const hotelImages: Record<string, string> = {
   "Grand Plaza Hotel": grandPlazaImg,
   "Coastal Paradise Resort": coastalParadiseImg,
@@ -24,7 +25,7 @@ export default function HotelsPage() {
   useEffect(() => {
     const fetchHotels = async () => {
       try {
-        const res = await fetch("https://hotelroombooking-jmh1.onrender.com/api/hotels");
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/hotels`);
         if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
         const data: Hotel[] = await res.json();
         setHotels(data);

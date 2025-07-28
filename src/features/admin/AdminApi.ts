@@ -51,7 +51,8 @@ interface AddUserPayload {
 export const adminApi = createApi({
   reducerPath: "adminApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:8080/api",
+    baseUrl: `${import.meta.env.VITE_API_URL}/api`,
+    credentials: "include", // Ensures cookies are sent in requests
     prepareHeaders: (headers) => {
       const token = localStorage.getItem("token");
       if (token) {
@@ -114,7 +115,7 @@ export const adminApi = createApi({
   }),
 });
 
-// ✅ EXPORT all hooks
+// ✅ EXPORT hooks
 export const {
   useGetAllUsersQuery,
   useUpdateUserRoleMutation,

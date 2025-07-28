@@ -1,12 +1,8 @@
-// ✅ src/pages/RegisterPage.tsx
-
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Navbar from "../layouts/NavBar";
-
-// ✅ Import your background image
 import bgImage from "../assets/auth/register-bg.jpg";
 
 export default function RegisterPage() {
@@ -35,7 +31,7 @@ export default function RegisterPage() {
     setLoading(true);
 
     try {
-      const res = await fetch("https://hotelroombooking-jmh1.onrender.com/api/auth/register", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -73,9 +69,7 @@ export default function RegisterPage() {
   return (
     <div
       className="min-h-screen flex flex-col bg-cover bg-center"
-      style={{
-        backgroundImage: `url(${bgImage})`,
-      }}
+      style={{ backgroundImage: `url(${bgImage})` }}
     >
       <Navbar />
       <ToastContainer />
@@ -89,9 +83,7 @@ export default function RegisterPage() {
           <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-3">
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block mb-1 text-xs font-medium">
-                  First Name
-                </label>
+                <label className="block mb-1 text-xs font-medium">First Name</label>
                 <input
                   type="text"
                   name="firstname"
@@ -103,9 +95,7 @@ export default function RegisterPage() {
               </div>
 
               <div>
-                <label className="block mb-1 text-xs font-medium">
-                  Last Name
-                </label>
+                <label className="block mb-1 text-xs font-medium">Last Name</label>
                 <input
                   type="text"
                   name="lastname"
@@ -142,9 +132,7 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label className="block mb-1 text-xs font-medium">
-                Phone Number
-              </label>
+              <label className="block mb-1 text-xs font-medium">Phone Number</label>
               <input
                 type="tel"
                 name="contactPhone"
@@ -168,9 +156,7 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label className="block mb-1 text-xs font-medium">
-                Register As
-              </label>
+              <label className="block mb-1 text-xs font-medium">Register As</label>
               <select
                 name="role"
                 value={form.role}

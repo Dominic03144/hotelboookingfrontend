@@ -18,10 +18,11 @@ export default function VerifyEmailPage() {
     setLoading(true);
 
     try {
-      const res = await axios.post("https://hotelroombooking-jmh1.onrender.com/api/auth/verify-email", {
-        email,
-        code,
-      });
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/auth/verify-email`,
+        { email, code },
+        { withCredentials: true }
+      );
 
       if (res.status === 200) {
         toast.success("✅ Email verified successfully");
@@ -40,13 +41,9 @@ export default function VerifyEmailPage() {
       className="min-h-screen bg-cover bg-center relative flex items-center justify-center px-4"
       style={{ backgroundImage: `url(${bgImage})` }}
     >
-      {/* ✅ Toast messages */}
       <ToastContainer />
-
-      {/* ✅ Dark overlay for contrast */}
       <div className="absolute inset-0 bg-black/50" />
 
-      {/* ✅ Main form */}
       <form
         onSubmit={handleSubmit}
         className="relative z-10 bg-white/90 backdrop-blur-md shadow-2xl rounded-xl p-8 max-w-sm w-full"
