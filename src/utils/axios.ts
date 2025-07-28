@@ -2,11 +2,10 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://hotelroombooking-jmh1.onrender.com",
-  withCredentials: true, // if you store JWT in cookies
+  baseURL: "https://hotelroombooking-jmh1.onrender.com/api", // <-- add /api
+  withCredentials: true,
 });
 
-// Attach token from localStorage automatically
 API.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) {
