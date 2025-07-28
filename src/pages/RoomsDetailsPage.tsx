@@ -1,8 +1,6 @@
-// ✅ src/pages/RoomDetailsPage.tsx
-
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import api from "../utils/axios"; // ✅ use the configured api instance
+import api from "../utils/axios"; // ✅ pre-configured Axios instance
 import { DateRange, type Range } from "react-date-range";
 import { addDays } from "date-fns";
 
@@ -26,7 +24,7 @@ export default function RoomDetailsPage() {
   useEffect(() => {
     const fetchRoom = async () => {
       try {
-        const res = await api.get(`/rooms/${roomId}`); // ✅ no extra /api
+        const res = await api.get(`/api/rooms/${roomId}`); // ✅ updated to /api/rooms
         const roomData = {
           ...res.data,
           pricePerNight: Number(res.data.pricePerNight),
@@ -78,7 +76,7 @@ export default function RoomDetailsPage() {
     }
 
     try {
-      const bookingRes = await api.post("/bookings", {
+      const bookingRes = await api.post("/api/bookings", {
         roomId: Number(roomId),
         checkInDate: checkIn,
         checkOutDate: checkOut,
@@ -89,7 +87,7 @@ export default function RoomDetailsPage() {
       const bookingId = bookingRes.data.booking.bookingId;
 
       const checkoutRes = await api.post(
-        "/payments/create-checkout-session",
+        "/api/payments/create-checkout-session",
         {
           bookingId,
           amount: totalAmount * 100, // cents for Stripe
