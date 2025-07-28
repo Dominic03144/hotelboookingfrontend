@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://hotelroombooking-jmh1.onrender.com/api", // <-- add /api
+  baseURL: "https://hotelroombooking-jmh1.onrender.com/api", // ✅ important
   withCredentials: true,
 });
 
