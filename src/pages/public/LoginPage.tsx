@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
-import Navbar from "../layouts/NavBar";
+import Navbar from "../../layouts/NavBar";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
-import { setUser } from "../features/auth/authSlice";
+import { setUser } from "../../features/auth/authSlice";
 
-import welcomeBackImg from "../assets/login/welcome-back.jpg";
-import bgImage from "../assets/login/login-bg.jpg";
+import welcomeBackImg from "../../assets/login/welcome-back.jpg";
+import bgImage from "../../assets/login/login-bg.jpg";
 
 export default function LoginPage() {
   const navigate = useNavigate();

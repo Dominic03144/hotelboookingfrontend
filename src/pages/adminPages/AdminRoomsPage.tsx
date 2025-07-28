@@ -6,8 +6,8 @@ import { toast } from "react-toastify";
 import {
   useGetRoomsQuery,
   useDeleteRoomMutation,
-} from "../features/admin/RoomsApi";
-import { useGetHotelsQuery } from "../features/admin/HotelApi"; // <-- you'll need this
+} from "../../features/admin/RoomsApi";
+import { useGetHotelsQuery } from "../../features/admin/HotelApi"; // <-- you'll need this
 
 export default function AdminRoomsPage() {
   const navigate = useNavigate();

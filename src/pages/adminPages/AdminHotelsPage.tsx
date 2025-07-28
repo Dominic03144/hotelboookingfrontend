@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import API from "../utils/axios";
-import type { Hotel } from "../types/hotel";
+import API from "../../utils/axios";
+import type { Hotel } from "../../types/hotel";
 
 export default function AdminHotelsPage() {
   const [hotels, setHotels] = useState<Hotel[]>([]);

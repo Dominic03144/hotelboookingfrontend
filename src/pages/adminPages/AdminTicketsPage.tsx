@@ -5,7 +5,7 @@ import {
   useGetAllTicketsQuery,
   useUpdateTicketStatusMutation,
   type Ticket,
-} from "../features/admin/AdminApi";
+} from "../../features/admin/AdminApi";
 import { toast } from "react-toastify";
 import { CheckCircleIcon, EyeIcon } from "lucide-react"; // ✅ Modern icons
 

@@ -1,15 +1,15 @@
 
 import { Link, useNavigate } from "react-router-dom";
 
-import bgImage from "../assets/landing/hero.jpg";
-import grandPlazaImg from "../assets/hotels/grand-plaza.jpg";
-import coastalParadiseImg from "../assets/hotels/coastal-paradise.jpg";
+import bgImage from "../../assets/landing/hero.jpg";
+import grandPlazaImg from "../../assets/hotels/grand-plaza.jpg";
+import coastalParadiseImg from "../../assets/hotels/coastal-paradise.jpg";
 
-import maryImg from "../assets/testimonials/mary.jpg";
-import kevinImg from "../assets/testimonials/kevin.jpg";
-import aminaImg from "../assets/testimonials/amina.jpg";
+import maryImg from "../../assets/testimonials/mary.jpg";
+import kevinImg from "../../assets/testimonials/kevin.jpg";
+import aminaImg from "../../assets/testimonials/amina.jpg";
 
-import Footer from "../components/footer";
+import Footer from "../../components/footer";
 
 type Hotel = {
   id: number;

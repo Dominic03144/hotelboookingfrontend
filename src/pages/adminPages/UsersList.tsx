@@ -1,6 +1,6 @@
 // src/pages/UsersList.tsx
 
-import { useGetAllUsersQuery } from "../features/admin/AdminApi";
+import { useGetAllUsersQuery } from "../../features/admin/AdminApi";
 import { useNavigate } from "react-router-dom";
 
 const UsersList = () => {

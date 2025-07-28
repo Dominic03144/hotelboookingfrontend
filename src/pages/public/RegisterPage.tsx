@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Navbar from "../layouts/NavBar";
-import bgImage from "../assets/auth/register-bg.jpg";
+import Navbar from "../../layouts/NavBar";
+import bgImage from "../../assets/auth/register-bg.jpg";
 
 export default function RegisterPage() {
   const navigate = useNavigate();

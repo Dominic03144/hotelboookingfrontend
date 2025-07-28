@@ -5,7 +5,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // ✅ Use your new uploaded background image
-import bgImage from "../assets/auth/verify-bg.jpg";
+import bgImage from "../../assets/auth/verify-bg.jpg";
 
 export default function VerifyEmailPage() {
   const navigate = useNavigate();

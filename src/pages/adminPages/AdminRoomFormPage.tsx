@@ -7,7 +7,7 @@ import {
   useGetRoomByIdQuery,
   useUpdateRoomMutation,
   type Room,
-} from "../features/admin/RoomsApi";
+} from "../../features/admin/RoomsApi";
 
 // Hotel interface matching backend response
 interface Hotel {

@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import api from "../utils/axios"; // ✅ pre-configured Axios instance
+import api from "../../utils/axios"; // ✅ pre-configured Axios instance
 import { DateRange, type Range } from "react-date-range";
 import { addDays } from "date-fns";
 

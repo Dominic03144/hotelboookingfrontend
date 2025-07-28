@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
-import { toast } from "react-toastify";
+import { useParams, useNavigate } from "react-router-dom";
 import { differenceInDays, format } from "date-fns";
-import type { Room } from "../types/room";
-import { useAuth } from "../context/authContext";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import type { Room } from "../../types/room";
+import API from "../../utils/axios"; // ✅ custom Axios instance
 
 const BookRoomPage: React.FC = () => {
   const { roomId } = useParams<{ roomId: string }>();
   const navigate = useNavigate();
-  const location = useLocation();
-  const { user } = useAuth();
 
   const [room, setRoom] = useState<Room | null>(null);
   const [loading, setLoading] = useState(true);
@@ -20,21 +19,6 @@ const BookRoomPage: React.FC = () => {
   const [guests, setGuests] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // 🔐 Redirect if not logged in
-  useEffect(() => {
-    if (!user) {
-      toast.info("Please log in to continue.");
-      navigate("/login", {
-        replace: true,
-        state: {
-          from: location,
-          message: "Please log in to continue.",
-        },
-      });
-    }
-  }, [user, navigate, location]);
-
-  // 🔄 Fetch room details
   useEffect(() => {
     if (!roomId) {
       setError("No room ID provided.");
@@ -44,12 +28,10 @@ const BookRoomPage: React.FC = () => {
 
     const fetchRoom = async () => {
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/rooms/${roomId}`);
-        if (!res.ok) throw new Error(`Failed to fetch room. Status: ${res.status}`);
-        const data: Room = await res.json();
-        setRoom(data);
+        const res = await API.get(`/rooms/${roomId}`);
+        setRoom(res.data);
       } catch (err: any) {
-        setError(err.message || "Failed to load room");
+        setError(err.response?.data?.message || "Failed to load room.");
       } finally {
         setLoading(false);
       }
@@ -69,7 +51,7 @@ const BookRoomPage: React.FC = () => {
   const handleBook = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!roomId || !room) return;
+    if (!room || !roomId) return;
 
     if (!checkInDate || !checkOutDate) {
       toast.error("Please select both check-in and check-out dates.");
@@ -84,33 +66,18 @@ const BookRoomPage: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/bookings`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          roomId: room.roomId,
-          checkInDate,
-          checkOutDate,
-          guests,
-          totalAmount: totalPrice,
-        }),
+      const res = await API.post("/bookings", {
+        roomId: room.roomId,
+        checkInDate,
+        checkOutDate,
+        guests,
+        totalAmount: totalPrice,
       });
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        toast.error(data.message || "Booking failed.");
-        return;
-      }
-
-      toast.success("✅ Booking created successfully! Redirecting to payment...");
-      navigate(`/payment/${data.booking.bookingId}`);
+      toast.success("✅ Booking created! Redirecting to payment...");
+      navigate(`/payment/${res.data.booking.bookingId}`);
     } catch (err: any) {
-      toast.error(err.message || "Something went wrong while booking.");
+      toast.error(err.response?.data?.message || "❌ Booking failed.");
     } finally {
       setIsSubmitting(false);
     }
@@ -122,6 +89,7 @@ const BookRoomPage: React.FC = () => {
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white rounded shadow mt-6">
+      <ToastContainer />
       <h1 className="text-3xl font-bold mb-2 text-gray-800">{room.roomType}</h1>
       <p className="text-gray-700 mb-1">
         <strong>Price per night:</strong> ${room.pricePerNight}
@@ -136,9 +104,7 @@ const BookRoomPage: React.FC = () => {
 
       <form onSubmit={handleBook} className="mt-6 space-y-4">
         <div>
-          <label className="block mb-1 font-medium text-gray-700">
-            Check-In Date
-          </label>
+          <label className="block mb-1 font-medium text-gray-700">Check-In Date</label>
           <input
             type="date"
             value={checkInDate}
@@ -150,9 +116,7 @@ const BookRoomPage: React.FC = () => {
         </div>
 
         <div>
-          <label className="block mb-1 font-medium text-gray-700">
-            Check-Out Date
-          </label>
+          <label className="block mb-1 font-medium text-gray-700">Check-Out Date</label>
           <input
             type="date"
             value={checkOutDate}

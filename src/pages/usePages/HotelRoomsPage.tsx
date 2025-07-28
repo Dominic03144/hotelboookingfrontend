@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import RoomCard from "../components/RoomCard";
-import type { Room } from "../types/room";
+import RoomCard from "../../components/RoomCard";
+import type { Room } from "../../types/room";
 import { motion } from "framer-motion";
 
 type Hotel = {

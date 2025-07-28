@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import api from "../lib/axios";
+import api from "../../lib/axios";
 
 import SupportTicketsPage from "./SupportTicketsPage";
-import ReviewsPage from "./ReviewsPage";
-import SettingsPage from "./SettingsPage";
+import ReviewsPage from "../public/ReviewsPage";
+import SettingsPage from "../SettingsPage";
 import PaymentsPage from "./UserPaymentsPage";
 
 interface Booking {

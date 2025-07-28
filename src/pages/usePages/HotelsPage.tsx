@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import HotelCard, { type Hotel } from "../components/auth/HotelCard";
+import HotelCard, { type Hotel } from "../../components/auth/HotelCard";
 
 // ✅ Import local hotel images
-import grandPlazaImg from "../assets/hotels/grand-plaza.jpg";
-import coastalParadiseImg from "../assets/hotels/coastal-paradise.jpg";
-import westonHotelImg from "../assets/hotels/weston-hotel.jpg";
-import hustlerHotelImg from "../assets/hotels/hustler-hotel.jpg";
+import grandPlazaImg from "../../assets/hotels/grand-plaza.jpg";
+import coastalParadiseImg from "../../assets/hotels/coastal-paradise.jpg";
+import westonHotelImg from "../../assets/hotels/weston-hotel.jpg";
+import hustlerHotelImg from "../../assets/hotels/hustler-hotel.jpg";
 
 // ✅ Map hotel names to images
 const hotelImages: Record<string, string> = {

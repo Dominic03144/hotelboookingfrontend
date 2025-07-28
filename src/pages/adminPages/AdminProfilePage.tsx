@@ -1,7 +1,7 @@
 // ✅ src/pages/AdminProfilePage.tsx
 
 import React, { useState } from "react";
-import { useAuth } from "../context/authContext";
+import { useAuth } from "../../context/authContext";
 import { toast } from "react-toastify";
 import axios from "axios";
 

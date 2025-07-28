@@ -4,7 +4,7 @@ import {
   useUpdateUserRoleMutation,
   useDeleteUserMutation,
   useAddUserMutation,
-} from "../features/admin/AdminApi";
+} from "../../features/admin/AdminApi";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 

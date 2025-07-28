@@ -1,24 +1,24 @@
 import { useParams, Link } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 
-import type { Hotel } from "../types/hotel";
+import type { Hotel } from "../../types/hotel";
 
 // Existing images
-import grandPlazaHero from "../assets/hotels/grand-plaza.jpg";
-import grandPlazaGallery1 from "../assets/hotels/grand-plaza-gallery1.jpg";
-import grandPlazaGallery2 from "../assets/hotels/grand-plaza-gallery2.jpg";
+import grandPlazaHero from "../../assets/hotels/grand-plaza.jpg";
+import grandPlazaGallery1 from "../../assets/hotels/grand-plaza-gallery1.jpg";
+import grandPlazaGallery2 from "../../assets/hotels/grand-plaza-gallery2.jpg";
 
-import coastalParadiseHero from "../assets/hotels/coastal-paradise.jpg";
-import coastalParadiseGallery1 from "../assets/hotels/coastal-paradise-gallery1.jpg";
-import coastalParadiseGallery2 from "../assets/hotels/coastal-paradise-gallery2.jpg";
+import coastalParadiseHero from "../../assets/hotels/coastal-paradise.jpg";
+import coastalParadiseGallery1 from "../../assets/hotels/coastal-paradise-gallery1.jpg";
+import coastalParadiseGallery2 from "../../assets/hotels/coastal-paradise-gallery2.jpg";
 
-import westonHero from "../assets/hotels/weston-hero.jpg";
-import westonGallery1 from "../assets/hotels/weston-gallery1.jpg";
-import westonGallery2 from "../assets/hotels/weston-gallery2.jpg";
+import westonHero from "../../assets/hotels/weston-hero.jpg";
+import westonGallery1 from "../../assets/hotels/weston-gallery1.jpg";
+import westonGallery2 from "../../assets/hotels/weston-gallery2.jpg";
 
-import hustlerHero from "../assets/hotels/hustler-hero.jpg";
-import hustlerGallery1 from "../assets/hotels/hustler-gallery1.jpg";
-import hustlerGallery2 from "../assets/hotels/hustler-gallery2.jpg";
+import hustlerHero from "../../assets/hotels/hustler-hero.jpg";
+import hustlerGallery1 from "../../assets/hotels/hustler-gallery1.jpg";
+import hustlerGallery2 from "../../assets/hotels/hustler-gallery2.jpg";
 
 interface Review {
   name: string;
