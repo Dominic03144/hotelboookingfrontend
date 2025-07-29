@@ -38,7 +38,7 @@ export interface UpdateRoomInput extends Partial<CreateRoomInput> {
 export const roomsApi = createApi({
   reducerPath: "roomsApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: `${import.meta.env.VITE_API_URL}/api`, // ✅ Uses env var
+    baseUrl: `${import.meta.env.VITE_API_URL}`, // ✅ Uses env var
     credentials: "include",
     prepareHeaders: (headers, { getState }) => {
       const state = getState() as RootState;

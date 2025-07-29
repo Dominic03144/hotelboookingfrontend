@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import api from "../../utils/axios"; // ✅ pre-configured Axios instance
+import api from "../../utils/axios";
 import { DateRange, type Range } from "react-date-range";
 import { addDays } from "date-fns";
 
@@ -8,7 +8,7 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 
 export default function RoomDetailsPage() {
-  const { roomId } = useParams();
+  const { roomId } = useParams<{ roomId: string }>();
 
   const [dateRange, setDateRange] = useState<Range[]>([
     {
@@ -23,8 +23,10 @@ export default function RoomDetailsPage() {
 
   useEffect(() => {
     const fetchRoom = async () => {
+      if (!roomId) return;
+
       try {
-        const res = await api.get(`/api/rooms/${roomId}`); // ✅ updated to /api/rooms
+        const res = await api.get(`/rooms/${roomId}`);
         const roomData = {
           ...res.data,
           pricePerNight: Number(res.data.pricePerNight),
@@ -34,6 +36,7 @@ export default function RoomDetailsPage() {
         console.error("Error fetching room:", err);
       }
     };
+
     fetchRoom();
   }, [roomId]);
 
@@ -76,7 +79,7 @@ export default function RoomDetailsPage() {
     }
 
     try {
-      const bookingRes = await api.post("/api/bookings", {
+      const bookingRes = await api.post("/bookings", {
         roomId: Number(roomId),
         checkInDate: checkIn,
         checkOutDate: checkOut,
@@ -87,7 +90,7 @@ export default function RoomDetailsPage() {
       const bookingId = bookingRes.data.booking.bookingId;
 
       const checkoutRes = await api.post(
-        "/api/payments/create-checkout-session",
+        "/payments/create-checkout-session",
         {
           bookingId,
           amount: totalAmount * 100, // cents for Stripe

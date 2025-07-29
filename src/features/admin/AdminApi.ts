@@ -51,7 +51,7 @@ interface AddUserPayload {
 export const adminApi = createApi({
   reducerPath: "adminApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: `${import.meta.env.VITE_API_URL}/api`,
+    baseUrl: `${import.meta.env.VITE_API_URL}`,
     credentials: "include", // Ensures cookies are sent in requests
     prepareHeaders: (headers) => {
       const token = localStorage.getItem("token");
