@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import type { RootState } from "../../app/store"; // ✅ Make sure this path is correct
 import type { Key } from "react";
 
 // ---------------------
@@ -52,12 +53,15 @@ export const adminApi = createApi({
   reducerPath: "adminApi",
   baseQuery: fetchBaseQuery({
     baseUrl: `${import.meta.env.VITE_API_URL}`,
-    credentials: "include", // Ensures cookies are sent in requests
-    prepareHeaders: (headers) => {
-      const token = localStorage.getItem("token");
+    credentials: "include",
+    prepareHeaders: (headers, { getState }) => {
+      const state = getState() as RootState;
+      const token = state.auth?.user?.token;
+
       if (token) {
         headers.set("Authorization", `Bearer ${token}`);
       }
+
       return headers;
     },
   }),

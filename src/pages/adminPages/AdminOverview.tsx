@@ -42,12 +42,16 @@ export default function AdminOverview() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const res = await fetch(
-          `${import.meta.env.VITE_API_URL}/admin/overview`,
-          {
-            credentials: "include",
-          }
-        );
+        const token = localStorage.getItem("token");
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/admin/overview`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+          credentials: "include",
+        });
+
         if (!res.ok) throw new Error("Failed to fetch overview data.");
         const data: AdminOverviewStats = await res.json();
         setStats(data);
