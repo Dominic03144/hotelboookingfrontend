@@ -44,7 +44,7 @@ export default function AdminOverview() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const res = await fetch("/admin/overview", {
+        const res = await fetch("/api/admin/overview", {
           credentials: "include",
         });
         if (!res.ok) throw new Error("Failed to fetch overview data.");
