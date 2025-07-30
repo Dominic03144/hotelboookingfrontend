@@ -23,7 +23,16 @@ export default function AdminPaymentsPage() {
 
   const fetchPayments = async () => {
     try {
-      const response = await axios.get("/api/admin/payments", { withCredentials: true });
+      const token = localStorage.getItem("token");
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/payments`,
+        {
+          withCredentials: true,
+          headers: {
+            Authorization: token ? `Bearer ${token}` : "",
+          },
+        }
+      );
       setPayments(response.data);
     } catch (err) {
       console.error("Failed to load payments", err);
@@ -31,13 +40,28 @@ export default function AdminPaymentsPage() {
   };
 
   const handleExport = () => {
-    const headers = ["Payment ID", "Booking ID", "User Email", "User Name", "Amount", "Status", "Method", "Created At"];
-    const rows = payments.map(p =>
-      [p.paymentId, p.bookingId, p.userEmail, p.userName, p.amount, p.paymentStatus, p.paymentMethod ?? "", p.createdAt]
-    );
+    const headers = [
+      "Payment ID",
+      "Booking ID",
+      "User Email",
+      "User Name",
+      "Amount",
+      "Status",
+      "Method",
+      "Created At",
+    ];
+    const rows = payments.map((p) => [
+      p.paymentId,
+      p.bookingId,
+      p.userEmail,
+      p.userName,
+      p.amount,
+      p.paymentStatus,
+      p.paymentMethod ?? "",
+      p.createdAt,
+    ]);
 
-    const csvContent =
-      [headers, ...rows].map(e => e.join(",")).join("\n");
+    const csvContent = [headers, ...rows].map((e) => e.join(",")).join("\n");
 
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
@@ -48,9 +72,12 @@ export default function AdminPaymentsPage() {
     link.click();
   };
 
-  const filteredPayments = payments.filter(p => {
+  const filteredPayments = payments.filter((p) => {
     const matchesStatus = statusFilter === "All" || p.paymentStatus === statusFilter;
-    const matchesSearch = searchTerm === "" || p.userEmail?.toLowerCase().includes(searchTerm.toLowerCase()) || p.bookingId.toString().includes(searchTerm);
+    const matchesSearch =
+      searchTerm === "" ||
+      p.userEmail?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      p.bookingId.toString().includes(searchTerm);
     return matchesStatus && matchesSearch;
   });
 
@@ -134,7 +161,9 @@ export default function AdminPaymentsPage() {
                     </span>
                   </td>
                   <td className="px-4 py-2 border">{p.paymentMethod ?? "-"}</td>
-                  <td className="px-4 py-2 border">{new Date(p.createdAt).toLocaleString()}</td>
+                  <td className="px-4 py-2 border">
+                    {new Date(p.createdAt).toLocaleString()}
+                  </td>
                 </tr>
               ))
             )}
