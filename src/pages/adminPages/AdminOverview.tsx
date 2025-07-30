@@ -1,5 +1,3 @@
-// src/pages/AdminOverview.tsx
-
 import { useEffect, useState } from "react";
 import {
   ResponsiveContainer,
@@ -44,9 +42,12 @@ export default function AdminOverview() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const res = await fetch("/api/admin/overview", {
-          credentials: "include",
-        });
+        const res = await fetch(
+          `${import.meta.env.VITE_API_URL}/admin/overview`,
+          {
+            credentials: "include",
+          }
+        );
         if (!res.ok) throw new Error("Failed to fetch overview data.");
         const data: AdminOverviewStats = await res.json();
         setStats(data);
@@ -153,18 +154,45 @@ function LoadingSpinner() {
   );
 }
 
-function StatCard({ title, value, icon, badge, percentage, isCurrency }: { title: string; value: number | string; icon: React.ReactNode; badge?: string; percentage?: number; isCurrency?: boolean; }) {
+function StatCard({
+  title,
+  value,
+  icon,
+  badge,
+  percentage,
+  isCurrency,
+}: {
+  title: string;
+  value: number | string;
+  icon: React.ReactNode;
+  badge?: string;
+  percentage?: number;
+  isCurrency?: boolean;
+}) {
   return (
     <div className="bg-gradient-to-tr from-white to-blue-50 dark:from-gray-800 dark:to-gray-700 shadow-lg rounded-xl p-6 flex flex-col items-center hover:scale-105 hover:shadow-2xl transition-transform duration-300 w-full">
       <div className="mb-3">{icon}</div>
       <h3 className="text-sm text-gray-500 dark:text-gray-300 mb-1">{title}</h3>
       <p className="text-3xl font-extrabold text-blue-900 dark:text-blue-100">
-        <CountUp end={Number(value)} duration={1.5} separator="," decimals={isCurrency ? 2 : 0} prefix={isCurrency ? "$" : ""} />
+        <CountUp
+          end={Number(value)}
+          duration={1.5}
+          separator=","
+          decimals={isCurrency ? 2 : 0}
+          prefix={isCurrency ? "$" : ""}
+        />
       </p>
-      {badge && <span className="mt-2 inline-block bg-blue-100 dark:bg-blue-900 dark:text-blue-200 text-blue-700 text-xs font-semibold px-2 py-1 rounded-full">{badge}</span>}
+      {badge && (
+        <span className="mt-2 inline-block bg-blue-100 dark:bg-blue-900 dark:text-blue-200 text-blue-700 text-xs font-semibold px-2 py-1 rounded-full">
+          {badge}
+        </span>
+      )}
       {percentage !== undefined && (
         <div className="w-full mt-2 h-2 bg-gray-200 dark:bg-gray-600 rounded-full">
-          <div className="h-2 rounded-full bg-gradient-to-r from-blue-500 to-blue-700 dark:from-blue-400 dark:to-blue-600" style={{ width: `${percentage}%` }}></div>
+          <div
+            className="h-2 rounded-full bg-gradient-to-r from-blue-500 to-blue-700 dark:from-blue-400 dark:to-blue-600"
+            style={{ width: `${percentage}%` }}
+          ></div>
         </div>
       )}
     </div>
