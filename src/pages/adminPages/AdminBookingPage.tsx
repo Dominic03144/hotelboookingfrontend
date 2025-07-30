@@ -28,9 +28,13 @@ export default function AdminBookingsPage() {
 
   const fetchBookings = async () => {
     try {
+      const token = localStorage.getItem("token"); // get token from localStorage
       const res = await fetch(`${import.meta.env.VITE_API_URL}/bookings`, {
-        credentials: "include",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
+
       if (!res.ok) throw new Error("Failed to fetch bookings");
       const data = await res.json();
       setBookings(data.bookings);
@@ -47,11 +51,12 @@ export default function AdminBookingsPage() {
 
   const handleStatusChange = async (bookingId: number, newStatus: string) => {
     try {
+      const token = localStorage.getItem("token");
       const res = await fetch(`${import.meta.env.VITE_API_URL}/bookings/${bookingId}`, {
         method: "PATCH",
-        credentials: "include",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ bookingStatus: newStatus }),
       });
@@ -67,11 +72,16 @@ export default function AdminBookingsPage() {
 
   const handleDelete = async (bookingId: number) => {
     if (!window.confirm("Are you sure you want to delete this booking?")) return;
+
     try {
+      const token = localStorage.getItem("token");
       const res = await fetch(`${import.meta.env.VITE_API_URL}/bookings/${bookingId}`, {
         method: "DELETE",
-        credentials: "include",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
+
       if (!res.ok) throw new Error("Failed to delete");
       toast.success("✅ Booking deleted");
       fetchBookings();
