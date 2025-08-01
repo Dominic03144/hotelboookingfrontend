@@ -2,20 +2,20 @@ import { Route } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 
 // Pages that use MainLayout (with Navbar/Footer)
-import LandingPage from "../pages/public/HomePage";
+import LandingPage from "../pages/Public/HomePage";
 import HotelsPage from "../pages/usePages/HotelsPage";
 import HotelDetailsPage from "../pages/usePages/HotelDetailsPage";
 import HotelRoomsPage from "../pages/usePages/HotelRoomsPage";
 import RoomDetailsPage from "../pages/usePages/RoomsDetailsPage";
-import ServicesPage from "../pages/public/ServicesPage";
-import AboutPage from "../pages/public/AboutPage";
-import ContactPage from "../pages/public/ContactPage";
+import ServicesPage from "../pages/Public/ServicesPage";
+import AboutPage from "../pages/Public/AboutPage";
+import ContactPage from "../pages/Public/ContactPage";
 import PaymentSuccessPage from "../pages/PaymentSuccessPage";
 
 // Pages that should NOT use MainLayout (no Navbar/Footer)
-import RegisterPage from "../pages/public/RegisterPage";
-import LoginPage from "../pages/public/LoginPage";
-import VerifyEmailPage from "../pages/public/verifyEmailpage";
+import RegisterPage from "../pages/Public/RegisterPage";
+import LoginPage from "../pages/Public/LoginPage";
+import VerifyEmailPage from "../pages/Public/verifyEmailpage";
 
 const PublicRoutes = (
   <>

@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import api from "../../utils/axios";
 
 import SupportTicketsPage from "./SupportTicketsPage";
-import ReviewsPage from "../public/ReviewsPage";
+import ReviewsPage from "../Public/ReviewsPage";
 import SettingsPage from "../SettingsPage";
 import PaymentsPage from "./UserPaymentsPage";
 
